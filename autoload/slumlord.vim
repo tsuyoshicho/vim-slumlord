@@ -2,7 +2,7 @@
 " @Author: Martin Grenfell <martin.grenfell@gmail.com>
 " @Date: 2018-12-07 13:00:22
 " @Last Modified by: Tsuyoshi CHO <Tsuyoshi.CHO@Gmail.com>
-" @Last Modified time: 2018-12-08 13:15:46
+" @Last Modified time: 2018-12-08 14:06:32
 " @License: WTFPL
 " PlantUML preview plugin core
 
@@ -40,38 +40,43 @@ function! slumlord#updatePreview(args) abort
     call slumlord#util#mungeDiagramInTmpFile(tmpfname)
     let b:slumlord_preview_fname = fnamemodify(tmpfname,  ':r') . '.' . ext
 
-    let cmd = "java -Dapple.awt.UIElement=true -splash: -jar ". g:slumlord_plantuml_jar_path ." -charset ". charset ." -t" . type ." ". tmpfname
+    let a:args["bufnr"] = bufnr("")
 
-    let write = has_key(a:args, 'write') && a:args["write"] == 1
-    if exists("*jobstart")
-        call jobstart(cmd, { "on_exit": function("s:asyncHandlerAdapter"), "write": write, "bufnr": bufnr("") })
-    elseif exists("*job_start")
-        call job_start(cmd, { "exit_cb": {job,st->call('s:asyncHandlerAdapter',[job,st,0],{"bufnr": bufnr(""),"write": write})}, "out_io": "buffer", "out_buf": bufnr("") })
+    let cmd = ["java", "-Dapple.awt.UIElement=true", "-splash:", "-jar", g:slumlord_plantuml_jar_path, "-charset", charset, "-t" . type, tmpfname]
+
+    let s:Job = vital#slumlord#import('System.Job')
+
+    if s:Job.is_available()
+      let job = s:Job.start(cmd, {
+            \ 'stdout': [''],
+            \ 'stderr': [''],
+            \ 'on_exit': funcref("s:on_exit",[a:args]),
+            \})
     else
-        call system(cmd)
-        if v:shell_error == 0
-            call s:updater.update(a:args)
-        endif
+      call system(join(cmd))
+      if v:shell_error == 0
+        call s:updater.update(a:args)
+      endif
     endif
 endfunction
 
-function! s:asyncHandlerAdapter(job_id, data, event) abort dict
-    if a:data != 0
+function! s:on_exit(args, exitval) abort
+    if bufnr("") != a:args.bufnr
         return 0
     endif
 
-    if bufnr("") != self.bufnr
-        return 0
+    if a:exitval is# 0
+      call s:updater.update(a:args)
+    else
+      echo "plantuml has error:".a:exitval
     endif
-
-    call s:updater.update(self)
 endfunction
 
 " other shit {{{1
 if exists("g:slumlord_separate_win") && g:slumlord_separate_win
-    let s:updater = slumlord#WinUpdater#getInstance()
+    let s:updater = slumlord#WinUpdater#new()
 else
-    let s:updater = slumlord#InPlaceUpdater#getInstance()
+    let s:updater = slumlord#InPlaceUpdater#new()
 endif
 
 " Outro {{{1

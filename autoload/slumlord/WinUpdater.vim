@@ -2,7 +2,7 @@
 " @Author: Martin Grenfell <martin.grenfell@gmail.com>
 " @Date: 2018-12-07 13:00:22
 " @Last Modified by: Tsuyoshi CHO <Tsuyoshi.CHO@Gmail.com>
-" @Last Modified time: 2018-12-08 00:11:42
+" @Last Modified time: 2018-12-08 13:01:06
 " @License: WTFPL
 " PlantUML preview plugin Window Updater
 
@@ -12,7 +12,7 @@ scriptencoding utf-8
 " WinUpdater object {{{1
 let s:WinUpdater = {}
 
-function! slumlord#WinUpdater#getInstance() abort
+function! slumlord#WinUpdater#new() abort
   return deepcopy(s:WinUpdater)
 endfunction
 

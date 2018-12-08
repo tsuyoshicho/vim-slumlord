@@ -2,7 +2,7 @@
 " @Author: Martin Grenfell <martin.grenfell@gmail.com>
 " @Date: 2018-12-07 13:00:22
 " @Last Modified by: Tsuyoshi CHO <Tsuyoshi.CHO@Gmail.com>
-" @Last Modified time: 2018-12-08 00:11:32
+" @Last Modified time: 2018-12-08 13:00:57
 " @License: WTFPL
 " PlantUML preview plugin InPlace Updater
 
@@ -13,7 +13,7 @@ scriptencoding utf-8
 let s:InPlaceUpdater = {}
 let s:InPlaceUpdater.divider = "@startuml"
 
-function! slumlord#InPlaceUpdater#getInstance() abort
+function! slumlord#InPlaceUpdater#new() abort
   return deepcopy(s:InPlaceUpdater)
 endfunction
 
