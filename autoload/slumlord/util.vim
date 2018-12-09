@@ -2,7 +2,7 @@
 " @Author: Martin Grenfell <martin.grenfell@gmail.com>
 " @Date: 2018-12-07 13:00:22
 " @Last Modified by: Tsuyoshi CHO <Tsuyoshi.CHO@Gmail.com>
-" @Last Modified time: 2018-12-08 00:11:36
+" @Last Modified time: 2018-12-08 23:02:11
 " @License: WTFPL
 " PlantUML preview plugin util
 
@@ -10,7 +10,6 @@
 scriptencoding utf-8
 
 " function {{{1
-
 function! slumlord#util#shouldInsertPreview() abort
     "check for 'no-preview flag
     if search('^\s*''no-preview', 'wn') > 0
@@ -55,6 +54,9 @@ endfunction
 function! slumlord#util#convertNonAsciiSupportedSyntax(fname) abort
     exec 'sp' a:fname
 
+    " write start top
+    call cursor(1,1)
+
     /@startuml/,/@enduml/s/^\s*\(boundary\|database\|entity\|control\)/participant/e
     /@startuml/,/@enduml/s/^\s*\(end \)\?\zsref\>/note/e
     /@startuml/,/@enduml/s/^\s*ref\>/note/e
@@ -82,17 +84,22 @@ function! slumlord#util#removeLeadingWhitespace(...) abort
     exec '1,' . diagramEnd . 's/^ \{'.smallestLead.'}//e'
 endfunction
 
-function! slumlord#util#addTitle() abort
+function! slumlord#util#getTitle() abort
     let lnum = search('^title ', 'n')
     if !lnum
-        return
+        return ''
     endif
 
     let title = substitute(getline(lnum), '^title \(.*\)', '\1', '')
+    return title
+endfunction
 
+function! slumlord#util#addTitle(title) abort
+  if a:title !=# ''
     call append(0, "")
-    call append(0, repeat("^", strdisplaywidth(title)+6))
-    call append(0, "   " . title)
+    call append(0, repeat("^", strdisplaywidth(a:title)+6))
+    call append(0, "   " . a:title)
+  endif
 endfunction
 
 " vim:set fdm=marker:

@@ -2,7 +2,7 @@
 " @Author: Martin Grenfell <martin.grenfell@gmail.com>
 " @Date: 2018-12-07 13:00:22
 " @Last Modified by: Tsuyoshi CHO <Tsuyoshi.CHO@Gmail.com>
-" @Last Modified time: 2018-12-08 13:15:31
+" @Last Modified time: 2018-12-09 13:29:25
 " @License: WTFPL
 " PlantUML Filetype preview syntax
 
@@ -11,6 +11,7 @@ scriptencoding utf-8
 
 " syntax  {{{1
 syn region plantumlPreview start=#\%^\ze\_.*\n@startuml# end=#\ze@startuml#
+
 syn match plantumlPreviewBoxParts #[┌┐└┘┬─│┴<>╚═╪╝╔═╤╪╗║╧╟╠╣]# containedin=plantumlPreview contained
 syn match plantumlPreviewCtrlFlow #\(LOOP\|ALT\|OPT\)[^│]*│\s*[a-zA-Z0-9?! ]*# containedin=plantumlPreview contains=plantumlPreviewBoxParts contained
 syn match plantumlPreviewCtrlFlow #║ \[[^]]*\]#hs=s+3,he=e-1 containedin=plantumlPreview contained

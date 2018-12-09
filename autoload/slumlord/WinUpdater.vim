@@ -2,7 +2,7 @@
 " @Author: Martin Grenfell <martin.grenfell@gmail.com>
 " @Date: 2018-12-07 13:00:22
 " @Last Modified by: Tsuyoshi CHO <Tsuyoshi.CHO@Gmail.com>
-" @Last Modified time: 2018-12-08 13:01:06
+" @Last Modified time: 2018-12-09 13:40:47
 " @License: WTFPL
 " PlantUML preview plugin Window Updater
 
@@ -12,18 +12,28 @@ scriptencoding utf-8
 " WinUpdater object {{{1
 let s:WinUpdater = {}
 
+" Vital
+let s:Opener = vital#slumlord#import('Vim.Buffer.Opener')
+let s:Writer = vital#slumlord#import('Vim.Buffer.Writer')
+
 function! slumlord#WinUpdater#new() abort
   return deepcopy(s:WinUpdater)
 endfunction
 
 function! s:WinUpdater.update(args) abort dict
     let fname = b:slumlord_preview_fname
-    call self.__moveToWin()
-    %d
+    let title = slumlord#util#getTitle()
+    let context = self.__moveToWin()
 
-    call append(0, "")
-    call append(0, "")
-    0
+    " remove all old content
+    call s:Writer.replace('%', 0, -1, [])
+
+    " inert 2 line at top
+    call s:Writer.replace('%', 0, 0, [''])
+    call s:Writer.replace('%', 0, 0, [''])
+
+    " write start at top
+    call cursor(1,1)
 
     call slumlord#util#readWithoutStoringAsAltFile(fname)
 
@@ -31,47 +41,34 @@ function! s:WinUpdater.update(args) abort dict
     %s/\s\+$//e
 
     call slumlord#util#removeLeadingWhitespace()
-    call slumlord#util#addTitle()
-    wincmd p
+    call slumlord#util#addTitle(title)
+
+    " return old buffer
+    call context.end()
 endfunction
 
 function s:WinUpdater.__moveToWin() abort dict
-    if exists("b:slumlord_bnum")
-        if bufwinnr(b:slumlord_bnum) != -1
-            exec bufwinnr(b:slumlord_bnum) . "wincmd w"
-        else
-            exec b:slumlord_bnum . "sb"
-        endif
-    else
-        let prev_bnum = bufnr("")
-        new
-        call setbufvar(prev_bnum, "slumlord_bnum", bufnr(""))
-        call self.__setupWinOpts()
-    endif
+    let bufname = printf('slumlord://%s', expand('%:p'))
+    let options =  {
+          \ "opener" : "pedit",
+          \ "force"  : 1,
+          \}
+
+    let context = s:Opener.open(bufname, options)
+
+    call self.__setupWinOpts()
+    return context
 endfunction
 
 function s:WinUpdater.__setupWinOpts() abort dict
-    setl nowrap
-    setl buftype=nofile
-    syn match plantumlPreviewBoxParts #[┌┐└┘┬─│┴<>╚═╪╝╔═╤╪╗║╧╟╠╣]#
-    syn match plantumlPreviewCtrlFlow #\(LOOP\|ALT\|OPT\)[^│]*│\s*[a-zA-Z0-9?! ]*#
-    syn match plantumlPreviewCtrlFlow #║ \[[^]]*\]#hs=s+3,he=e-1
-    syn match plantumlPreviewEntity #│\w*│#hs=s+1,he=e-1
-    syn match plantumlPreviewTitleUnderline #\^\+#
-    syn match plantumlPreviewNoteText #║[^┌┐└┘┬─│┴<>╚═╪╝╔═╤╪╗║╧╟╠╣]*[░ ]║#hs=s+1,he=e-2
-    syn match plantumlPreviewDividerText #╣[^┌┐└┘┬─│┴<>╚═╪╝╔═╤╪╗║╧╟╣]*╠#hs=s+1,he=e-1
-    syn match plantumlPreviewMethodCall #\(\(│\|^\)\s*\)\@<=[a-zA-Z_]*([[:alnum:],_ ]*)# 
-    syn match plantumlPreviewMethodCallParen #[()]# containedin=plantumlPreviewMethodCall contained
+    setlocal nowrap
+    setlocal buftype=nofile bufhidden=wipe
 
-    hi def link plantumlPreviewBoxParts normal
-    hi def link plantumlPreviewCtrlFlow Keyword
-    hi def link plantumlPreviewLoopName Statement
-    hi def link plantumlPreviewEntity Statement
-    hi def link plantumlPreviewTitleUnderline Statement
-    hi def link plantumlPreviewNoteText Constant
-    hi def link plantumlPreviewDividerText Constant
-    hi def link plantumlPreviewMethodCall plantumlText
-    hi def link plantumlPreviewMethodCallParen plantumlColonLine
+    " all buffer set as preview region
+    syn region plantumlPreview start=#\%^# end=#\%$#
+
+    " setup preview filetype as plantuml
+    set filetype=plantuml
 endfunction
 
 " vim:set fdm=marker:
