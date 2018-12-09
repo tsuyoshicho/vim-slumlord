@@ -2,7 +2,7 @@
 " @Author: Martin Grenfell <martin.grenfell@gmail.com>
 " @Date: 2018-12-07 13:00:22
 " @Last Modified by: Tsuyoshi CHO <Tsuyoshi.CHO@Gmail.com>
-" @Last Modified time: 2018-12-09 14:00:27
+" @Last Modified time: 2018-12-09 16:51:38
 " @License: WTFPL
 " PlantUML Filetype preview syntax
 
@@ -12,14 +12,26 @@ scriptencoding utf-8
 " syntax  {{{1
 syn region plantumlPreview start=#\%^\ze\_.*\n@startuml# end=#\ze@startuml#
 
+" UTF
 syn match plantumlPreviewBoxParts #[<>┌┐└┘├┬┴┼┤─│╫╟╧╤╪╢╔╗╚╝╠╦╩╬╣═║]# containedin=plantumlPreview contained
-syn match plantumlPreviewCtrlFlow #\(LOOP\|ALT\|OPT\)[^│]*│\s*[a-zA-Z0-9?! ]*# containedin=plantumlPreview contains=plantumlPreviewBoxParts contained
-syn match plantumlPreviewCtrlFlow #║ \[[^]]*\]#hs=s+3,he=e-1 containedin=plantumlPreview contained
-syn match plantumlPreviewEntity #│\w*│#hs=s+1,he=e-1 containedin=plantumlPreview contained
-syn match plantumlPreviewTitleUnderline #\^\+# containedin=plantumlPreview contained
+" ASCII
+syn match plantumlPreviewBoxParts #[<>\\=_\-~!|/.,`']# containedin=plantumlPreview contained
+
+syn match plantumlPreviewLoopName #\(LOOP\|ALT\|OPT\)[^│/]*[│/]\s*[a-zA-Z0-9?! ]*# containedin=plantumlPreview contains=plantumlPreviewBoxParts contained
+
+syn match plantumlPreviewCtrlFlow #[║!] \[[^]]*\]#hs=s+3,he=e-1 containedin=plantumlPreview contained
+
+syn match plantumlPreviewEntity #[│|]\w*│#hs=s+0,he=e-1 containedin=plantumlPreview contained
+
+syn match plantumlPreviewTitleUnderline #^\^\+$# containedin=plantumlPreview contained
+
 syn match plantumlPreviewNoteText #║[^<>┌┐└┘├┬┴┼┤─│╫╟╧╤╪╢╔╗╚╝╠╦╩╬╣═║]*[░ ]║#hs=s+1,he=e-2 containedin=plantumlPreview contained
+syn match plantumlPreviewNoteText #|[^<>\\=_\-~!|/.,`']*|#hs=s+1,he=e-2 containedin=plantumlPreview contained
+
 syn match plantumlPreviewDividerText #╣[^<>┌┐└┘├┬┴┼┤─│╫╟╧╤╪╢╔╗╚╝╠╦╩╬╣═║]*╠#hs=s+1,he=e-1 containedin=plantumlPreview contained
-syn match plantumlPreviewMethodCall #\(\(│\|^\)\s*\)\@<=[a-zA-Z_]*([[:alnum:],_ ]*)# containedin=plantumlPreview contained
+syn match plantumlPreviewDividerText #=[^<>\\=_\-~!|/.,`']*=#hs=s+1,he=e-1 containedin=plantumlPreview contained
+
+syn match plantumlPreviewMethodCall #\(\(│\||\|^\)\s*\)\@<=[a-zA-Z_]*([[:alnum:],_ ]*)# containedin=plantumlPreview contained
 syn match plantumlPreviewMethodCallParen #[()]# containedin=plantumlPreviewMethodCall contained
 
 " highlight  {{{1
