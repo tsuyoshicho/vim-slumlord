@@ -2,7 +2,7 @@
 " @Author: Martin Grenfell <martin.grenfell@gmail.com>
 " @Date: 2018-12-07 13:00:22
 " @Last Modified by: Tsuyoshi CHO <Tsuyoshi.CHO@Gmail.com>
-" @Last Modified time: 2018-12-09 16:51:38
+" @Last Modified time: 2018-12-09 17:07:39
 " @License: WTFPL
 " PlantUML Filetype preview syntax
 
@@ -13,7 +13,9 @@ scriptencoding utf-8
 syn region plantumlPreview start=#\%^\ze\_.*\n@startuml# end=#\ze@startuml#
 
 " UTF
-syn match plantumlPreviewBoxParts #[<>┌┐└┘├┬┴┼┤─│╫╟╧╤╪╢╔╗╚╝╠╦╩╬╣═║]# containedin=plantumlPreview contained
+syn match plantumlPreviewBoxParts #[<>┌┐└┘├┬┴┼┤─│╫╟╧╤╪╢╔╗╚╝╠╦╩╬╣═║░⁝]# containedin=plantumlPreview contained
+syn match plantumlPreviewBoxParts #║"│# containedin=plantumlPreview contained
+
 " ASCII
 syn match plantumlPreviewBoxParts #[<>\\=_\-~!|/.,`']# containedin=plantumlPreview contained
 
@@ -25,7 +27,7 @@ syn match plantumlPreviewEntity #[│|]\w*│#hs=s+0,he=e-1 containedin=plantuml
 
 syn match plantumlPreviewTitleUnderline #^\^\+$# containedin=plantumlPreview contained
 
-syn match plantumlPreviewNoteText #║[^<>┌┐└┘├┬┴┼┤─│╫╟╧╤╪╢╔╗╚╝╠╦╩╬╣═║]*[░ ]║#hs=s+1,he=e-2 containedin=plantumlPreview contained
+syn match plantumlPreviewNoteText #║[^<>┌┐└┘├┬┴┼┤─│╫╟╧╤╪╢╔╗╚╝╠╦╩╬╣═║]*[░⁝]║#hs=s+1,he=e-2 containedin=plantumlPreview contained
 syn match plantumlPreviewNoteText #|[^<>\\=_\-~!|/.,`']*|#hs=s+1,he=e-2 containedin=plantumlPreview contained
 
 syn match plantumlPreviewDividerText #╣[^<>┌┐└┘├┬┴┼┤─│╫╟╧╤╪╢╔╗╚╝╠╦╩╬╣═║]*╠#hs=s+1,he=e-1 containedin=plantumlPreview contained
