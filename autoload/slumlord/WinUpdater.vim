@@ -2,7 +2,7 @@
 " @Author: Martin Grenfell <martin.grenfell@gmail.com>
 " @Date: 2018-12-07 13:00:22
 " @Last Modified by: Tsuyoshi CHO <Tsuyoshi.CHO@Gmail.com>
-" @Last Modified time: 2018-12-09 13:40:47
+" @Last Modified time: 2018-12-09 15:41:14
 " @License: WTFPL
 " PlantUML preview plugin Window Updater
 
@@ -43,6 +43,9 @@ function! s:WinUpdater.update(args) abort dict
     call slumlord#util#removeLeadingWhitespace()
     call slumlord#util#addTitle(title)
 
+    " all buffer set as preview region
+    syn region plantumlPreview start=#\%^# end=#\%$#
+
     " return old buffer
     call context.end()
 endfunction
@@ -63,9 +66,6 @@ endfunction
 function s:WinUpdater.__setupWinOpts() abort dict
     setlocal nowrap
     setlocal buftype=nofile bufhidden=wipe
-
-    " all buffer set as preview region
-    syn region plantumlPreview start=#\%^# end=#\%$#
 
     " setup preview filetype as plantuml
     set filetype=plantuml
