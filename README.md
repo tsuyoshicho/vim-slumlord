@@ -37,9 +37,8 @@ Plugin 'scrooloose/vim-slumlord'
 
 Then run `:Vundle install`
 
-I also recommend installing the
-[plantuml-syntax](https://github.com/aklt/plantuml-syntax) plugin as Slumlord
-uses this for its syntax file.
+This plugin require installing the [plantuml-syntax](https://github.com/aklt/plantuml-syntax).
+Slumload uses this for its syntax file.
 
 ```
 Plugin 'aklt/plantuml-syntax'
@@ -48,7 +47,7 @@ Plugin 'aklt/plantuml-syntax'
 Usage
 =====
 
-Edit a `.uml` file and enter some plantuml code. When you save it, a preview
+Edit a plantuml file(ex. `*.uml`) and enter some plantuml code. When you save it, a preview
 will be forcefully inserted/updated at the top of your file!
 
 Note: I have only used this for sequence diagrams - the ASCII output of
