@@ -1,5 +1,5 @@
-- [![Powered by vital.vim](https://img.shields.io/badge/powered%20by-vital.vim-80273f.svg)](https://github.com/vim-jp/vital.vim) : Core
-- [![Powered by vital-Whisky](https://img.shields.io/badge/powered%20by-vital.vim-80273f.svg)](https://github.com/lambdalisue/vital-Whisky) : Whisky
+[![Powered by vital.vim](https://img.shields.io/badge/powered%20by-vital.vim-80273f.svg)](https://github.com/vim-jp/vital.vim)
+[![Powered by vital-Whisky](https://img.shields.io/badge/powered%20by-vital--Whisky-80273f.svg)](https://github.com/lambdalisue/vital-Whisky)
 
 Oh shit! Lock up your daughters it's ...
 
