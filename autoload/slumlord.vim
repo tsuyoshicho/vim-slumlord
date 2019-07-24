@@ -2,7 +2,7 @@
 " @Author: Martin Grenfell <martin.grenfell@gmail.com>
 " @Date: 2018-12-07 13:00:22
 " @Last Modified by: Tsuyoshi CHO <Tsuyoshi.CHO@Gmail.com>
-" @Last Modified time: 2019-07-23 17:58:46
+" @Last Modified time: 2019-07-24 12:18:05
 " @License: WTFPL
 " PlantUML preview plugin core
 
@@ -28,15 +28,12 @@ let s:Job = vital#slumlord#import('System.Job')
 if get(g:,"slumlord_separate_win", 0)
   if has('nvim') && exists('*nvim_win_set_config')
     " neovim float window support
-    let s:updater = slumlord#WinUpdater#new()
+    let s:updater = slumlord#FloatUpdater#new()
   elseif has("patch-8.1.1453")
     " vim popup suport
-    let s:updater = slumlord#WinUpdater#new()
-  elseif exists('+previewwindow')
-    " previewwindow support
-    let s:updater = slumlord#WinUpdater#new()
+    let s:updater = slumlord#PopupUpdater#new()
   else
-    " buffer split
+    " previewwindow support
     let s:updater = slumlord#WinUpdater#new()
   endif
 else
